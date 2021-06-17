@@ -121,7 +121,8 @@ module.exports = {
   forgotPassword: async(req, res) => {
     try {
       const {email} = req.body
-      const userData = await findUserByEmail(email)
+      const userData = await findUserByEmail(email);
+      console.log("userData:::", userData)
     } catch (error) {
       return res.status(500).json({ message: "Server error"});
     }
