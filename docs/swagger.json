@@ -1,0 +1,364 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This APIs docmantation is only for Swagger Practice",
+    "version": "1.0.0",
+    "title": "CRUD",
+    "contact": "azimpanjwar@gmail.com"
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["userColection"],
+        "summary": "Register-user",
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "name",
+            "description": "Enter Name here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "description": "Enter email here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "description": "Enter password here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "dob",
+            "description": "Date of birth (DD/MM/YYYY)",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "status",
+            "description": "Enter status here['Active','InActive']",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Registered successfully"
+          }
+        }
+      }
+    },
+    "/user/signin": {
+      "post": {
+        "tags": ["userColection"],
+        "summary": "Login-user",
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "email",
+            "description": "Enter email here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "description": "Enter password here",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User LoogedIn successfully"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "summary": "user-profile",
+        "tags": ["userColection"],
+        "operationId": "profile-data",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": {},
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/user/change-password": {
+      "post": {
+        "tags": ["userColection"],
+        "summary": "Change-user-password",
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "oldPassword",
+            "description": "Enter password here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "newPassword",
+            "description": "Enter newPassword here",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "confirmPassword",
+            "description": "Enter confirmPassword here",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User LoogedIn successfully"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "summary": "user-logout",
+        "tags": ["userColection"],
+        "operationId": "logout",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": {},
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/post/add-post": {
+      "post": {
+        "summary": "add-post",
+        "tags": ["PostCollection"],
+        "operationId": "add-post",
+        "deprecated": false,
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "title",
+            "description": "Title of the Post",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "description": "description of the Post",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post Added Successfully",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/post/all-post": {
+      "get": {
+        "summary": "all-post-data",
+        "tags": ["PostCollection"],
+        "operationId": "all-post-data",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All post List",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/post/single-post/{id}": {
+      "get": {
+        "path": "id",
+        "summary": "single-post-data",
+        "tags": ["PostCollection"],
+        "operationId": "single-post-data",
+        "deprecated": false,
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Numeric ID of the POST to get",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/post/update-post/{id}": {
+      "put": {
+        "summary": "update-post-data",
+        "tags": ["PostCollection"],
+        "operationId": "update-post-data",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Numeric ID of the POST to get",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "description": "Title of the Post",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "description": "description of the Post",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated SuccessFully",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/post/delete-post/{id}": {
+      "delete": {
+        "summary": "delete-post-data",
+        "tags": ["PostCollection"],
+        "operationId": "delete-post-data",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Numeric ID of the POST to get",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Successfully",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "token",
+      "in": "header"
+    }
+  },
+  "tags": [
+    {
+      "name": "userColection"
+    },
+    {
+      "name": "PostCollection",
+      "description": ""
+    }
+  ]
+}
