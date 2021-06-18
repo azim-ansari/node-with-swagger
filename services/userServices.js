@@ -1,25 +1,25 @@
 import mongoose from "mongoose";
 import userModel from "../model/userModel";
 
-exports.signup = async data => {
+export const signup = async data => {
   return await userModel.create(data);
 };
 
-exports.findUserByEmail = async data => {
+export const findUserByEmail = async data => {
   return await userModel.findOne({ email: data });
 };
 
-exports.updateUserByEmail = async (email, data) => {
+export const updateUserByEmail = async (email, data) => {
   return await userModel.findOneAndUpdate({ email: email }, data, {
     new: true,
   });
 };
 
-exports.getUser = async userId => {
+export const getUser = async userId => {
   return await userModel.findOne({ _id: mongoose.Types.ObjectId(userId) });
 };
 
-exports.signout = async userId => {
+export const signout = async userId => {
   return await userModel.findOneAndUpdate(
     { _id: mongoose.Types.ObjectId(userId) },
     { $set: { userToken: "" } },
@@ -27,14 +27,14 @@ exports.signout = async userId => {
   );
 };
 
-exports.findUserByToken = async token => {
+export const findUserByToken = async token => {
   return await userModel.findOne({ userToken: token });
 };
 
-exports.passwordChange = async (userId, hashedPassword) => {
+export const passwordChange = async (userId, hashedPassword) => {
   return await userModel.findOneAndUpdate(
     { _id: mongoose.Types.ObjectId(userId) },
-    {$set:{password:hashedPassword}},
+    { $set: { password: hashedPassword } },
     { new: true }
   );
 };

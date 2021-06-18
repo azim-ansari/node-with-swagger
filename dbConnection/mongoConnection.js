@@ -16,4 +16,4 @@ const mongoInit = async () => {
   }
 };
 
-module.exports = mongoInit;
+export default mongoInit;

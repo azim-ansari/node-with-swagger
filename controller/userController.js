@@ -97,14 +97,13 @@ module.exports = {
         if (!userData) {
           return res.status(404).json({ message: "User Not found" });
         } else {
-          let compare = await comparePassword(
-            userData.password,
-            oldPassword
-          );
+          let compare = await comparePassword(userData.password, oldPassword);
           if (compare == true) {
             var hashedPassword = await bcrypt.hash(newPassword, 10);
-            const data = await passwordChange(userId,hashedPassword);
-            return res.status(200).json({message: "Password successfully Changed "});
+            const data = await passwordChange(userId, hashedPassword);
+            return res
+              .status(200)
+              .json({ message: "Password successfully Changed " });
           } else {
             return res.status(404).json({ message: "Invalid Old password" });
           }
@@ -118,13 +117,27 @@ module.exports = {
       return res.status(500).json({ message: "Server  error " });
     }
   },
-  forgotPassword: async(req, res) => {
+  forgotPassword: async (req, res) => {
     try {
-      const {email} = req.body
+      const { email } = req.body;
       const userData = await findUserByEmail(email);
-      console.log("userData:::", userData)
+      if (!userData) {
+        return res
+          .status(404)
+          .json({ message: "No User found, Please register !!" });
+      } else {
+        const secret = process.env.SECRET_KEY + userData.password;
+        console.log("secret:::", secret);
+        const payload = {
+          email: userData.email,
+          _id: userData._id,
+        };
+        const token = jwt.sign(payload, secret, { expiresIn: "10m" });
+        console.log("token:::", token);
+        res.status(200).json({ message: "Data", userData });
+      }
     } catch (error) {
-      return res.status(500).json({ message: "Server error"});
+      return res.status(500).json({ message: "Server error" });
     }
   },
 

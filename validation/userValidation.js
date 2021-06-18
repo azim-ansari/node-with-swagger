@@ -9,4 +9,4 @@ const schema = joi.object().keys({
   profilePic: joi.string(),
 });
 
-module.exports = schema;
+export default schema;

@@ -14,6 +14,9 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
+router.get("/forgot-password", function (req, res, next) {
+  res.render("forgot-password");
+});
 router.post("/register", register);
 router.post("/signin", login);
 router.get("/profile", verifyToken, profile);
@@ -21,4 +24,4 @@ router.post("/change-password", verifyToken, changePassword);
 router.post("/forgot-password", forgotPassword);
 router.post("/logout", verifyToken, logout);
 
-module.exports = router;
+export default router;

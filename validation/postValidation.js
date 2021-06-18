@@ -6,4 +6,4 @@ const schema = joi.object().keys({
   createdBy: joi.string(),
 });
 
-module.exports = schema;
+export default schema;
