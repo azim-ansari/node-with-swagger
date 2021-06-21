@@ -1,13 +1,13 @@
 import userJoi from "../validation/userValidation";
 import {
-	signup,
+	register,
 	findUserByEmail,
 	updateUserByEmail,
 	logout,
-	getUser,
-	passwordChange,
-	passwordReset,
-	profileUpdate,
+	getUserProfile,
+	changePassword,
+	resetPassword,
+	updateProfile,
 } from "../services/userServices";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -23,7 +23,7 @@ module.exports = {
 			if (user) {
 				return res.status(421).json({ message: "User Registered already!!" });
 			}
-			const userInfo = await signup(value);
+			const userInfo = await register(value);
 			const newUser = await removeKeys(userInfo._doc, "password", "updatedAt", "__v");
 			res.status(201).json({ message: "Registered successfuly", user: newUser });
 		} catch (err) {
@@ -60,7 +60,7 @@ module.exports = {
 	profile: async (req, res) => {
 		try {
 			const userId = req.user._id;
-			const userData = await getUser(userId);
+			const userData = await getUserProfile(userId);
 			const profileData = await removeKeys(
 				userData._doc,
 				"__v",
@@ -79,7 +79,7 @@ module.exports = {
 	updateProfile: async (req, res) => {
 		try {
 			const userId = req.user.id;
-			const userData = await profileUpdate(userId, req.body);
+			const userData = await updateProfile(userId, req.body);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
 			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
 		} catch (err) {
@@ -104,14 +104,14 @@ module.exports = {
 			const userId = req.user.id;
 			const { oldPassword, newPassword, confirmPassword } = req.body;
 			if (newPassword == confirmPassword) {
-				const userData = await getUser(userId);
+				const userData = await getUserProfile(userId);
 				if (!userData) {
 					return res.status(404).json({ message: "User Not found" });
 				} else {
 					let compare = await comparePassword(userData.password, oldPassword);
 					if (compare == true) {
 						var hashedPassword = await bcrypt.hash(newPassword, 10);
-						const data = await passwordChange(userId, hashedPassword);
+						const data = await changePassword(userId, hashedPassword);
 						return res.status(200).json({ message: "Password successfully Changed " });
 					} else {
 						return res.status(404).json({ message: "Invalid Old password" });
@@ -168,7 +168,7 @@ module.exports = {
 			} else {
 				if (newPassword == confirmPassword) {
 					var hashedPassword = await bcrypt.hash(newPassword, 10);
-					const userData = await passwordReset(userId, token, hashedPassword);
+					const userData = await resetPassword(userId, token, hashedPassword);
 					return res.status(200).json({ message: "Password Reset Successfully!! please Login" });
 				} else {
 					return res
