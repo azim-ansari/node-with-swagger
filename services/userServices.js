@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import userModel from "../model/userModel";
 
-export const signup = async data => {
+export const register = async data => {
 	return await userModel.create(data);
 };
 
@@ -15,13 +15,13 @@ export const updateUserByEmail = async (email, data) => {
 	});
 };
 
-export const profileUpdate = async (userId, data) => {
+export const updateProfile = async (userId, data) => {
 	return await userModel.findOneAndUpdate({ _id: mongoose.Types.ObjectId(userId) }, data, {
 		new: true,
 	});
 };
 
-export const getUser = async userId => {
+export const getUserProfile = async userId => {
 	return await userModel.findOne({ _id: mongoose.Types.ObjectId(userId) });
 };
 
@@ -37,7 +37,7 @@ export const findUserByToken = async token => {
 	return await userModel.findOne({ userToken: token });
 };
 
-export const passwordReset = async (userId, token, password) => {
+export const resetPassword = async (userId, token, password) => {
 	return await userModel.findOneAndUpdate(
 		{ _id: mongoose.Types.ObjectId(userId) },
 		{ $set: { userToken: token, password: password } },
@@ -45,7 +45,7 @@ export const passwordReset = async (userId, token, password) => {
 	);
 };
 
-export const passwordChange = async (userId, hashedPassword) => {
+export const changePassword = async (userId, hashedPassword) => {
 	return await userModel.findOneAndUpdate(
 		{ _id: mongoose.Types.ObjectId(userId) },
 		{ $set: { password: hashedPassword } },

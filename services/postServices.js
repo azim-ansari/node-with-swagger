@@ -13,14 +13,14 @@ export const allPost = async () => {
 	return await postModel.find();
 };
 
-export const postSingleData = async postId => {
+export const singlePostDetail = async postId => {
 	return await postModel.find(
 		{ _id: mongoose.Types.ObjectId(postId) },
 		{ description: 1, title: 1, createdBy: 1, createdAt: 1, updatedAt: 1 }
 	);
 };
 
-export const updatedPost = async (postId, userId, postData) => {
+export const updatePost = async (postId, userId, postData) => {
 	return await postModel.findOneAndUpdate(
 		{
 			_id: mongoose.Types.ObjectId(postId),
@@ -31,7 +31,7 @@ export const updatedPost = async (postId, userId, postData) => {
 	);
 };
 
-export const postDelete = async (postId, userId) => {
+export const deletePost = async (postId, userId) => {
 	return await postModel.deleteOne({
 		_id: mongoose.Types.ObjectId(postId),
 		createdBy: mongoose.Types.ObjectId(userId),
