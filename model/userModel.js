@@ -36,6 +36,10 @@ const userSchema = mongoose.Schema(
     tokenExpiresIn: {
       type: String,
     },
+    resetLink: {
+      data: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
