@@ -55,7 +55,6 @@ export const addComment = async (postId, userId, data) => {
 };
 
 export const updateComment = async (commentId, userId, data) => {
-	console.log("data:::", data);
 	return await postModel.findOneAndUpdate(
 		{
 			"comments._id": mongoose.Types.ObjectId(commentId),
