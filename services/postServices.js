@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import postModel from "../model/postModel";
 
-export const postAdd = async (title, description, createdBy) => {
+export const postAdd = async (title, description, createdBy, postCoverPic) => {
 	return await postModel.create({
 		title: title,
 		description: description,
 		createdBy: createdBy,
+		postCoverPic: postCoverPic,
 	});
 };
 

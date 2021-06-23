@@ -11,12 +11,17 @@ import {
 module.exports = {
 	addPost: async (req, res) => {
 		try {
-			const userId = req.user._id;
+			const userId = req.user.id;
 			const { title, description } = req.body;
+			console.log("req.file", typeof req.file);
 			if (!title || !description) {
 				return res.status(421).json({ message: "Please Enter title and description" });
 			}
-			const data = await postAdd(title, description, userId);
+			if (typeof req.file === "undefined") {
+				return res.status(404).json({ message: "Profile pic not found " });
+			}
+			const postCoverPic = "http://localhost:5000" + "/public/images/" + req.file.filename;
+			const data = await postAdd(title, description, userId, postCoverPic);
 			res.status(201).json({ message: "Created Post", data });
 		} catch (err) {
 			console.log("Err:::", err);
@@ -98,7 +103,6 @@ module.exports = {
 				return res.status(404).json({ message: "please Enter a valid commentId" });
 			} else {
 				const commentData = await updateComment(commentId, userId, description);
-				console.log("commentData:::", commentData);
 				return res.status(200).json({ message: "updated  comment  successfully", commentData });
 			}
 		} catch (err) {

@@ -16,7 +16,6 @@ import jwt from "jsonwebtoken";
 import { removeKeys } from "../utils/removeKeys";
 import { comparePassword } from "../utils/compare";
 import { sendMailHtml } from "../utils/sendEmail";
-import path from "path";
 
 module.exports = {
 	register: async (req, res) => {
@@ -93,7 +92,6 @@ module.exports = {
 	updateProfilePic: async (req, res) => {
 		try {
 			const userId = req.user.id;
-			console.log("userId:::", userId);
 			if (typeof req.file === "undefined") {
 				return res.status(404).json({ message: "Profile pic not found " });
 			}
@@ -115,10 +113,8 @@ module.exports = {
 				return res.status(404).json({ message: "Profile pic not found " });
 			}
 			const coverPicData = req.files.map(item => {
-				// coverPic = item.filename;
 				return "http://localhost:5000" + "/public/images/" + item.filename;
 			});
-			// const coverPic = "http://localhost:5000" + "/public/images/" + coverPicData;
 			const userData = await updateCoverPic(userId, coverPicData);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
 			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
