@@ -10,6 +10,7 @@ import {
 	resetPassword,
 	updateProfile,
 	updateProfilePic,
+	updateCoverPic,
 } from "../controller/userController";
 import upload from "../utils/fileUpload";
 // import userController from "../controller/userController";
@@ -23,9 +24,7 @@ router.get("/", function (req, res, next) {
 router.get("/forgot-password", function (req, res, next) {
 	res.render("forgot-password");
 });
-// router.get("/public/images", function (req, res, next) {
-// 	res.render("profilePic");
-// });
+
 router.get("/reset-password/:userId/:token", function (req, res, next) {
 	res.render("reset-password");
 });
@@ -34,6 +33,7 @@ router.post("/signin", login);
 router.get("/profile", verifyToken, profile);
 router.put("/update-profile", verifyToken, updateProfile);
 router.patch("/update-profile-pic", verifyToken, upload.single("profilePic"), updateProfilePic);
+router.put("/update-cover-pic", verifyToken, upload.array("coverPic"), updateCoverPic);
 router.post("/change-password", verifyToken, changePassword);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:userId/:token", resetPassword);

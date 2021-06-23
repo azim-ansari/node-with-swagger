@@ -21,10 +21,18 @@ export const updateProfile = async (userId, data) => {
 	});
 };
 export const updateProfilePic = async (userId, data) => {
-	console.log("data:::", data);
 	return await userModel.findOneAndUpdate(
 		{ _id: mongoose.Types.ObjectId(userId) },
 		{ $set: { profilePic: data } },
+		{
+			new: true,
+		}
+	);
+};
+export const updateCoverPic = async (userId, data) => {
+	return await userModel.findOneAndUpdate(
+		{ _id: mongoose.Types.ObjectId(userId) },
+		{ $push: { coverPic: data } },
 		{
 			new: true,
 		}

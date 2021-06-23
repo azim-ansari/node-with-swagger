@@ -9,6 +9,7 @@ import {
 	resetPassword,
 	updateProfile,
 	updateProfilePic,
+	updateCoverPic,
 } from "../services/userServices";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -96,10 +97,29 @@ module.exports = {
 			if (typeof req.file === "undefined") {
 				return res.status(404).json({ message: "Profile pic not found " });
 			}
-			const img = res.sendFile(path.join(__dirname, `./public/images/${req.file.filename}`));
-			console.log("img:::", img);
-			// const profilePic = "http://localhost:5000" + "/public/images/" + req.file.filename;
-			const userData = await updateProfilePic(userId, img);
+			// const img = res.sendFile(path.join(__dirname, `./public/images/${req.file.filename}`));
+			// console.log("img:::", img);
+			const profilePic = "http://localhost:5000" + "/public/images/" + req.file.filename;
+			const userData = await updateProfilePic(userId, profilePic);
+			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
+			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
+		} catch (err) {
+			console.log(err);
+			return res.status(500).json({ message: "Server Error", err });
+		}
+	},
+	updateCoverPic: async (req, res) => {
+		try {
+			const userId = req.user.id;
+			if (typeof req.files === "undefined") {
+				return res.status(404).json({ message: "Profile pic not found " });
+			}
+			const coverPicData = req.files.map(item => {
+				// coverPic = item.filename;
+				return "http://localhost:5000" + "/public/images/" + item.filename;
+			});
+			// const coverPic = "http://localhost:5000" + "/public/images/" + coverPicData;
+			const userData = await updateCoverPic(userId, coverPicData);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
 			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
 		} catch (err) {
