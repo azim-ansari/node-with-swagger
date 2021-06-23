@@ -15,10 +15,7 @@ export const allPost = async () => {
 };
 
 export const singlePostDetail = async postId => {
-	return await postModel.find(
-		{ _id: mongoose.Types.ObjectId(postId) },
-		{ description: 1, title: 1, createdBy: 1, createdAt: 1, updatedAt: 1 }
-	);
+	return await postModel.find({ _id: mongoose.Types.ObjectId(postId) });
 };
 
 export const updatePost = async (postId, userId, postData) => {

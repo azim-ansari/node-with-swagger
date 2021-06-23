@@ -16,6 +16,7 @@ import jwt from "jsonwebtoken";
 import { removeKeys } from "../utils/removeKeys";
 import { comparePassword } from "../utils/compare";
 import { sendMailHtml } from "../utils/sendEmail";
+import { handleResponse, handleError } from "../config/requestHandler";
 
 module.exports = {
 	register: async (req, res) => {
@@ -23,14 +24,14 @@ module.exports = {
 			const value = await userJoi.validateAsync(req.body);
 			const user = await findUserByEmail(req.body.email);
 			if (user) {
-				return res.status(421).json({ message: "User Registered already!!" });
+				return handleResponse({ res, msg: "User Registered already!!" });
+			} else {
+				const userInfo = await register(value);
+				const newUser = await removeKeys(userInfo._doc, "password", "updatedAt", "__v");
+				return handleResponse({ res, msg: "Registered successfuly", data: newUser });
 			}
-			const userInfo = await register(value);
-			const newUser = await removeKeys(userInfo._doc, "password", "updatedAt", "__v");
-			res.status(201).json({ message: "Registered successfuly", user: newUser });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error" });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -38,11 +39,11 @@ module.exports = {
 		try {
 			const user = await findUserByEmail(req.body.email);
 			if (!user) {
-				return res.status(404).json({ message: "User Not Registered" });
+				return handleResponse({ res, msg: "User Not Registered" });
 			} else {
 				const match = await comparePassword(user.password, req.body.password);
 				if (match == false) {
-					return res.status(421).json({ message: "Invalid Credential, Try again!!" });
+					return handleResponse({ res, msg: "Invalid Credential, Try again!!" });
 				} else {
 					const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 					const userData = await updateUserByEmail(req.body.email, {
@@ -50,12 +51,11 @@ module.exports = {
 						tokenExpiresIn: Date.now() + 60 * 30 * 1000,
 					});
 					const LoginData = removeKeys(userData._doc, "password", "tokenExpiresIn", "__v");
-					return res.status(200).json({ message: "LoggedIn successfully", LoginData });
+					return handleResponse({ res, msg: "LoggedIn successfully", data: LoginData });
 				}
 			}
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error" });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -71,10 +71,9 @@ module.exports = {
 				"createdAt",
 				"updatedAt"
 			);
-			return res.status(200).json({ message: "Successfully fetched profile", profileData });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error" });
+			return handleResponse({ res, msg: "Successfully fetched profile", data: profileData });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -83,44 +82,41 @@ module.exports = {
 			const userId = req.user.id;
 			const userData = await updateProfile(userId, req.body);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
-			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error" });
+			return handleResponse({ res, msg: "User Updated SuccessFully", data: profileData });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
+
 	updateProfilePic: async (req, res) => {
 		try {
 			const userId = req.user.id;
 			if (typeof req.file === "undefined") {
-				return res.status(404).json({ message: "Profile pic not found " });
+				return handleResponse({ res, msg: "Profile pic not found " });
 			}
-			// const img = res.sendFile(path.join(__dirname, `./public/images/${req.file.filename}`));
-			// console.log("img:::", img);
 			const profilePic = "http://localhost:5000" + "/public/images/" + req.file.filename;
 			const userData = await updateProfilePic(userId, profilePic);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
-			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
-		} catch (err) {
-			console.log(err);
-			return res.status(500).json({ message: "Server Error", err });
+			return handleResponse({ res, msg: "User profile Updated SuccessFully", data: profileData });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
+
 	updateCoverPic: async (req, res) => {
 		try {
 			const userId = req.user.id;
 			if (typeof req.files === "undefined") {
-				return res.status(404).json({ message: "Profile pic not found " });
+				return handleResponse({ res, msg: "Profile pic not found " });
 			}
 			const coverPicData = req.files.map(item => {
 				return "http://localhost:5000" + "/public/images/" + item.filename;
 			});
 			const userData = await updateCoverPic(userId, coverPicData);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
-			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
-		} catch (err) {
-			console.log(err);
-			return res.status(500).json({ message: "Server Error", err });
+			return handleResponse({ res, msg: "User cover pic Updated SuccessFully", data: profileData });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -131,24 +127,22 @@ module.exports = {
 			if (newPassword == confirmPassword) {
 				const userData = await getUserProfile(userId);
 				if (!userData) {
-					return res.status(404).json({ message: "User Not found" });
+					return handleResponse({ res, msg: "User Not found" });
 				} else {
 					let compare = await comparePassword(userData.password, oldPassword);
 					if (compare == true) {
 						var hashedPassword = await bcrypt.hash(newPassword, 10);
 						const data = await changePassword(userId, hashedPassword);
-						return res.status(200).json({ message: "Password successfully Changed " });
+						return handleResponse({ res, msg: "Password successfully Changed " });
 					} else {
-						return res.status(404).json({ message: "Invalid Old password" });
+						return handleResponse({ res, msg: "Invalid Old password" });
 					}
 				}
 			} else {
-				return res.status(400).json({
-					message: "newPassword and confirmPassword doesnot match.",
-				});
+				return handleResponse({ res, msg: "newPassword and confirmPassword doesnot match." });
 			}
 		} catch (error) {
-			return res.status(500).json({ message: "Server  error " });
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -156,11 +150,11 @@ module.exports = {
 		try {
 			const { email } = req.body;
 			if (!email) {
-				return res.status(421).json({ message: "Please add email to proceed futher!!" });
+				return handleResponse({ res, msg: "Please add email to proceed futher!!" });
 			}
 			const userData = await findUserByEmail(email);
 			if (!userData) {
-				return res.status(404).json({ message: "No User found, Please register !!" });
+				return handleResponse({ res, msg: "No User found, Please register !!" });
 			}
 			const secret = process.env.SECRET_KEY + userData.password;
 			const payload = {
@@ -175,12 +169,13 @@ module.exports = {
 				"passwod-reset",
 				`<h2>Please click on given link to reset-password</h2> <p>${link}</p>`
 			);
-			return res
-				.status(200)
-				.json({ message: "reset-password Successfully sent to given Email", link });
+			return handleResponse({
+				res,
+				msg: "link Successfully sent to given Email",
+				data: link,
+			});
 		} catch (error) {
-			console.log("error", error);
-			return res.status(500).json({ message: "Server error" });
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -189,20 +184,18 @@ module.exports = {
 			const { userId, token } = req.params;
 			const { newPassword, confirmPassword } = req.body;
 			if (!newPassword || !confirmPassword) {
-				return res.status(421).json({ message: "Please add all the feilds" });
+				return handleResponse({ res, msg: "Please add all the feilds" });
 			} else {
 				if (newPassword == confirmPassword) {
 					var hashedPassword = await bcrypt.hash(newPassword, 10);
 					const userData = await resetPassword(userId, token, hashedPassword);
-					return res.status(200).json({ message: "Password Reset Successfully!! please Login" });
+					return handleResponse({ res, msg: "Password Reset Successfully!! please Login" });
 				} else {
-					return res
-						.status(400)
-						.json({ message: "newPassword And ConfirmPassword Doesn't Match!!" });
+					return handleResponse({ res, msg: "newPassword And ConfirmPassword Doesn't Match!!" });
 				}
 			}
-		} catch (err) {
-			res.status(500).json({ message: "Server Error" });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 
@@ -210,9 +203,9 @@ module.exports = {
 		try {
 			const userId = req.user._id;
 			const logoutData = await logout(userId);
-			return res.status(200).json({ message: "successFully Logout" });
+			return handleResponse({ res, msg: "successFully Logout" });
 		} catch (error) {
-			console.log(err);
+			return handleError({ res, error, data: error });
 		}
 	},
 };

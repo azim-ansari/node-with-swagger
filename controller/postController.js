@@ -7,47 +7,45 @@ import {
 	addComment,
 	updateComment,
 } from "../services/postServices";
+import { handleResponse, handleError } from "../config/requestHandler";
 
 module.exports = {
 	addPost: async (req, res) => {
 		try {
 			const userId = req.user.id;
 			const { title, description } = req.body;
-			console.log("req.file", typeof req.file);
 			if (!title || !description) {
-				return res.status(421).json({ message: "Please Enter title and description" });
+				return handleResponse({ res, msg: "Please Enter title and description" });
 			}
 			if (typeof req.file === "undefined") {
-				return res.status(404).json({ message: "Profile pic not found " });
+				return handleResponse({ res, msg: "Profile pic not found" });
 			}
 			const postCoverPic = "http://localhost:5000" + "/public/images/" + req.file.filename;
 			const data = await postAdd(title, description, userId, postCoverPic);
-			res.status(201).json({ message: "Created Post", data });
-		} catch (err) {
-			console.log("Err:::", err);
-			res.status(500).json({ message: "Server Error", err });
+			return handleResponse({ res, msg: "Created Post", data: data });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	postList: async (req, res) => {
 		try {
 			const data = await allPost({});
-			res.status(200).json({ message: "All post List", data });
-		} catch (err) {
-			res.status(500).json({ message: "Server Error", err });
+			return handleResponse({ res, msg: "All post List", data: data });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	singlePostDetail: async (req, res) => {
 		try {
 			const postId = req.params.id;
 			if (postId == "undefined") {
-				return res.status(404).json({ message: "Please Enter the Id of post" });
+				return handleResponse({ res, msg: "Please Enter the Id of post" });
+			} else {
+				const data = await singlePostDetail(postId);
+				return handleResponse({ res, msg: "single post here", data: data });
 			}
-			console.log(postId);
-			const data = await singlePostDetail(postId);
-			res.status(200).json({ message: "single post here", data });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error", err });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	updatePost: async (req, res) => {
@@ -56,12 +54,12 @@ module.exports = {
 			const userId = req.user._id;
 			const data = await updatePost(postId, userId, req.body);
 			if (data == null) {
-				return res.status(404).json({ message: "Post not created yet, please Add post" });
+				return handleResponse({ res, msg: "Post not created yet, please Add post" });
+			} else {
+				return handleResponse({ res, msg: "single post here", data: data });
 			}
-			return res.status(200).json({ message: "single post updated", data });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error", err });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	deletePost: async (req, res) => {
@@ -69,17 +67,16 @@ module.exports = {
 			const postId = req.params.id;
 			const userId = req.user._id;
 			if (postId == "undefined") {
-				return res.status(404).json({ message: "post data not found" });
+				return handleResponse({ res, msg: "post data not found" });
 			}
 			const data = await deletePost(postId, userId);
-			console.log("data::", data);
 			if (data.deletedCount == 0) {
-				return res.status(404).json({ message: "No post available to delete" });
+				return handleResponse({ res, msg: "No post available to delete" });
+			} else {
+				return handleResponse({ res, msg: "single post deleted" });
 			}
-			return res.status(200).json({ message: "single post deleted" });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error", err });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	addComment: async (req, res) => {
@@ -88,10 +85,9 @@ module.exports = {
 			const userId = req.user.id;
 			const { description } = req.body;
 			const commentData = await addComment(postId, userId, description);
-			return res.status(200).json({ message: "comments Added successfully", commentData });
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error", err });
+			return handleResponse({ res, msg: "comments Added successfully", data: commentData });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 	updateComment: async (req, res) => {
@@ -100,14 +96,13 @@ module.exports = {
 			const userId = req.user.id;
 			const { description } = req.body;
 			if (commentId == "undefined") {
-				return res.status(404).json({ message: "please Enter a valid commentId" });
+				return handleResponse({ res, msg: "please Enter a valid commentId" });
 			} else {
 				const commentData = await updateComment(commentId, userId, description);
-				return res.status(200).json({ message: "updated  comment  successfully", commentData });
+				return handleResponse({ res, msg: "updated  comment  successfully", data: commentData });
 			}
-		} catch (err) {
-			console.log(err);
-			res.status(500).json({ message: "Server Error", err });
+		} catch (error) {
+			return handleError({ res, error, data: error });
 		}
 	},
 };
