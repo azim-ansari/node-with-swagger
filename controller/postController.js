@@ -4,6 +4,8 @@ import {
 	singlePostDetail,
 	updatePost,
 	deletePost,
+	addComment,
+	updateComment,
 } from "../services/postServices";
 
 module.exports = {
@@ -69,7 +71,36 @@ module.exports = {
 			if (data.deletedCount == 0) {
 				return res.status(404).json({ message: "No post available to delete" });
 			}
-			res.status(200).json({ message: "single post deleted" });
+			return res.status(200).json({ message: "single post deleted" });
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({ message: "Server Error", err });
+		}
+	},
+	addComment: async (req, res) => {
+		try {
+			const postId = req.params.id;
+			const userId = req.user.id;
+			const { description } = req.body;
+			const commentData = await addComment(postId, userId, description);
+			return res.status(200).json({ message: "comments Added successfully", commentData });
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({ message: "Server Error", err });
+		}
+	},
+	updateComment: async (req, res) => {
+		try {
+			const commentId = req.params.id;
+			const userId = req.user.id;
+			const { description } = req.body;
+			if (commentId == "undefined") {
+				return res.status(404).json({ message: "please Enter a valid commentId" });
+			} else {
+				const commentData = await updateComment(commentId, userId, description);
+				console.log("commentData:::", commentData);
+				return res.status(200).json({ message: "updated  comment  successfully", commentData });
+			}
 		} catch (err) {
 			console.log(err);
 			res.status(500).json({ message: "Server Error", err });

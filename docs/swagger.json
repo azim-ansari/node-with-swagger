@@ -201,7 +201,7 @@
 				}
 			}
 		},
-		"/user/{userId}/reset-password/{token}": {
+		"/user/reset-password/{userId}/{token}": {
 			"post": {
 				"summary": "user-reset-password",
 				"tags": ["userColection"],

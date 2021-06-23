@@ -6,6 +6,8 @@ import {
 	addPost,
 	updatePost,
 	deletePost,
+	addComment,
+	updateComment,
 } from "../controller/postController";
 
 var router = express.Router();
@@ -16,5 +18,7 @@ router.get("/all-post", verifyToken, postList);
 router.get("/single-post/:id", verifyToken, singlePostDetail);
 router.put("/update-post/:id", verifyToken, updatePost);
 router.delete("/delete-post/:id", verifyToken, deletePost);
+router.post("/add-comment/:id", verifyToken, addComment);
+router.put("/update-comment/:id", verifyToken, updateComment);
 
 export default router;

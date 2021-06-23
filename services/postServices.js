@@ -37,3 +37,39 @@ export const deletePost = async (postId, userId) => {
 		createdBy: mongoose.Types.ObjectId(userId),
 	});
 };
+
+export const addComment = async (postId, userId, data) => {
+	const commentData = await postModel.findOneAndUpdate(
+		{ _id: mongoose.Types.ObjectId(postId) },
+		{
+			$push: {
+				comments: {
+					commentedBy: userId,
+					description: data,
+				},
+			},
+		},
+		{ new: true, upsert: true }
+	);
+	return commentData;
+};
+
+export const updateComment = async (commentId, userId, data) => {
+	console.log("data:::", data);
+	return await postModel.findOneAndUpdate(
+		{
+			"comments._id": mongoose.Types.ObjectId(commentId),
+			"comments.commentedBy": userId,
+		},
+		{
+			$set: {
+				comments: {
+					description: data,
+				},
+			},
+		},
+		{
+			new: true,
+		}
+	);
+};

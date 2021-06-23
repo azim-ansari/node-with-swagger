@@ -8,12 +8,14 @@ import {
 	changePassword,
 	resetPassword,
 	updateProfile,
+	updateProfilePic,
 } from "../services/userServices";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { removeKeys } from "../utils/removeKeys";
 import { comparePassword } from "../utils/compare";
 import { sendMailHtml } from "../utils/sendEmail";
+import path from "path";
 
 module.exports = {
 	register: async (req, res) => {
@@ -90,12 +92,19 @@ module.exports = {
 	updateProfilePic: async (req, res) => {
 		try {
 			const userId = req.user.id;
-			const userData = await profilePicUpdate(userId, req.body);
+			console.log("userId:::", userId);
+			if (typeof req.file === "undefined") {
+				return res.status(404).json({ message: "Profile pic not found " });
+			}
+			const img = res.sendFile(path.join(__dirname, `./public/images/${req.file.filename}`));
+			console.log("img:::", img);
+			// const profilePic = "http://localhost:5000" + "/public/images/" + req.file.filename;
+			const userData = await updateProfilePic(userId, img);
 			const profileData = await removeKeys(userData._doc, "__v", "password", " userToken");
 			return res.status(200).json({ message: "User Updated SuccessFully", profileData });
 		} catch (err) {
 			console.log(err);
-			res.status(500).json({ message: "Server Error" });
+			return res.status(500).json({ message: "Server Error", err });
 		}
 	},
 
