@@ -7,7 +7,7 @@ import {
 	addComment,
 	updateComment,
 } from "../services/postServices";
-import { handleResponse, handleError } from "../config/requestHandler";
+import { handleResponse, handleError, unAuthorized } from "../config/requestHandler";
 // import
 
 module.exports = {
@@ -18,13 +18,18 @@ module.exports = {
 			if (!title || !description) {
 				return handleResponse({ res, msg: "Please Enter title and description" });
 			}
-			if (typeof req.file == undefined) {
+			if (typeof req.files == undefined) {
 				return handleResponse({ res, msg: "Profile pic not found" });
 			}
 			// const postCoverPic = "https://post-gallery.s3.ap-south-1.amazonaws.com/" + req.file.filename;
-			const data = await postAdd(title, description, userId, req.file.location);
+			const postCoverPic = req.files.map(item => {
+				return item.location;
+			});
+			// console.log("postCoverPic", postCoverPic);
+			const data = await postAdd(title, description, userId, postCoverPic);
 			return handleResponse({ res, msg: "Created Post", data: data });
 		} catch (error) {
+			console.log(error);
 			return handleError({ res, error, data: error });
 		}
 	},
@@ -116,7 +121,7 @@ module.exports = {
 				return handleResponse({ res, msg: "updated  comment  successfully", data: commentData });
 			}
 		} catch (error) {
-			console.log("errpr::", error);
+			console.log("error::", error);
 			return handleError({ res, error, data: error });
 		}
 	},

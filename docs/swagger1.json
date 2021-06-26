@@ -1,0 +1,728 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "PostData",
+		"contact": {}
+	},
+	"host": "example.com",
+	"basePath": "/",
+	"schemes": ["http"],
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
+	"paths": {
+		"/user/register": {
+			"post": {
+				"summary": "Register-user",
+				"tags": ["userColection"],
+				"operationId": "Register-user",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Register-user-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/signin": {
+			"post": {
+				"summary": "Login-user",
+				"tags": ["userColection"],
+				"operationId": "Login-user",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Login-user-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/profile": {
+			"get": {
+				"summary": "Profile-user",
+				"tags": ["userColection"],
+				"operationId": "Profile-user",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/update-profile": {
+			"put": {
+				"summary": "Update-profile",
+				"tags": ["userColection"],
+				"operationId": "Update-profile",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Update-profile-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/update-profile-pic": {
+			"patch": {
+				"summary": "Update-profile Pic",
+				"tags": ["userColection"],
+				"operationId": "Update-profilePic",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"consumes": ["application/x-www-form-urlencoded"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "profilePic",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/update-cover-pic": {
+			"put": {
+				"summary": "Update-cover Pic",
+				"tags": ["userColection"],
+				"operationId": "Update-coverPic",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"consumes": ["application/x-www-form-urlencoded"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "coverPic",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/change-password": {
+			"post": {
+				"summary": "Change-password",
+				"tags": ["userColection"],
+				"operationId": "Change-password",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Change-password-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/forgot-password": {
+			"post": {
+				"summary": "Forgot-password",
+				"tags": ["userColection"],
+				"operationId": "Forgot-password",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Forgot-password-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/60cc493c6099420b10a2970d/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF6aW1wYW5qd2FyQGdtYWlsLmNvbSIsIl9pZCI6IjYwY2M0OTNjNjA5OTQyMGIxMGEyOTcwZCIsImlhdCI6MTYyNDI1Mzc0NywiZXhwIjoxNjI0MjU0MzQ3fQ.yiXcJ3OPqeXERlrVk-s4oL_BceirsQAeeCnE95I55E0": {
+			"post": {
+				"summary": "Reset-password",
+				"tags": ["userColection"],
+				"operationId": "Reset-password",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Reset-password-Request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/user/logout": {
+			"post": {
+				"summary": "Logout-user",
+				"tags": ["userColection"],
+				"operationId": "Logout-user",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/add-post": {
+			"post": {
+				"summary": "add-post",
+				"tags": ["postCollection"],
+				"operationId": "add-post",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"consumes": ["application/x-www-form-urlencoded"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "description",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "title",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "postCoverPic",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/upload-image": {
+			"post": {
+				"summary": "add-post Copy",
+				"tags": ["postCollection"],
+				"operationId": "add-postCopy",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"consumes": ["application/x-www-form-urlencoded"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "postCoverPic",
+						"in": "formData",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/add-comment/60d57fe15740f8386026b7b6": {
+			"post": {
+				"summary": "add-comment",
+				"tags": ["postCollection"],
+				"operationId": "add-comment",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/add-comment-request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/update-comment/60d595a2b757fd28c86e1339": {
+			"put": {
+				"summary": "update-comment",
+				"tags": ["postCollection"],
+				"operationId": "update-comment",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/update-comment-request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/all-post": {
+			"get": {
+				"summary": "all-post-data",
+				"tags": ["postCollection"],
+				"operationId": "all-post-data",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/update-post/60c868b034efd721a0b36a34": {
+			"put": {
+				"summary": "update-post-data",
+				"tags": ["postCollection"],
+				"operationId": "update-post-data",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					},
+					{
+						"name": "Body",
+						"in": "body",
+						"required": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/update-post-data-request"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/single-post/60d1c61bf9969a30547b75bd": {
+			"get": {
+				"summary": "single-post-data",
+				"tags": ["postCollection"],
+				"operationId": "single-post-data",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		},
+		"/post/delete-post/60d31d8844deeb42c466c1e2": {
+			"delete": {
+				"summary": "delete-post-data",
+				"tags": ["postCollection"],
+				"operationId": "delete-post-data",
+				"deprecated": false,
+				"produces": ["application/json"],
+				"parameters": [
+					{
+						"name": "token",
+						"in": "header",
+						"required": true,
+						"type": "string",
+						"description": ""
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "",
+						"headers": {}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"Register-user-Request": {
+			"title": "Register-user-Request",
+			"example": {
+				"status": "Active",
+				"dob": "15/03/1998",
+				"name": "mustak",
+				"email": "ranipanjwar@gmail.com",
+				"password": "123456"
+			},
+			"type": "object",
+			"properties": {
+				"status": {
+					"type": "string"
+				},
+				"dob": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				}
+			},
+			"required": ["status", "dob", "name", "email", "password"]
+		},
+		"Login-user-Request": {
+			"title": "Login-user-Request",
+			"example": {
+				"email": "rehanpanjwar@gmail.com",
+				"password": "123456"
+			},
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				}
+			},
+			"required": ["email", "password"]
+		},
+		"Update-profile-Request": {
+			"title": "Update-profile-Request",
+			"example": {
+				"status": "InActive",
+				"dob": "18/06/2000",
+				"profilePic": "https://i.ibb.co/NyYpfGD/dp.jpg",
+				"name": "Rijwan"
+			},
+			"type": "object",
+			"properties": {
+				"status": {
+					"type": "string"
+				},
+				"dob": {
+					"type": "string"
+				},
+				"profilePic": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": ["status", "dob", "profilePic", "name"]
+		},
+		"Change-password-Request": {
+			"title": "Change-password-Request",
+			"example": {
+				"oldPassword": "123456",
+				"newPassword": "123456789",
+				"confirmPassword": "123456789"
+			},
+			"type": "object",
+			"properties": {
+				"oldPassword": {
+					"type": "string"
+				},
+				"newPassword": {
+					"type": "string"
+				},
+				"confirmPassword": {
+					"type": "string"
+				}
+			},
+			"required": ["oldPassword", "newPassword", "confirmPassword"]
+		},
+		"Forgot-password-Request": {
+			"title": "Forgot-password-Request",
+			"example": {
+				"email": "azimpanjwar@gmail.com"
+			},
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				}
+			},
+			"required": ["email"]
+		},
+		"Reset-password-Request": {
+			"title": "Reset-password-Request",
+			"example": {
+				"newPassword": "azim@123",
+				"confirmPassword": "azim@123"
+			},
+			"type": "object",
+			"properties": {
+				"newPassword": {
+					"type": "string"
+				},
+				"confirmPassword": {
+					"type": "string"
+				}
+			},
+			"required": ["newPassword", "confirmPassword"]
+		},
+		"add-comment-request": {
+			"title": "add-comment-request",
+			"example": {
+				"description": "Awesome Tutorial"
+			},
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				}
+			},
+			"required": ["description"]
+		},
+		"update-comment-request": {
+			"title": "update-comment-request",
+			"example": {
+				"description": "new Azim"
+			},
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				}
+			},
+			"required": ["description"]
+		},
+		"update-post-data-request": {
+			"title": "update-post-data-request",
+			"example": {
+				"title": "Azim",
+				"description": "Azim tutorial"
+			},
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				}
+			},
+			"required": ["title", "description"]
+		}
+	},
+	"tags": [
+		{
+			"name": "userColection"
+		},
+		{
+			"name": "postCollection"
+		}
+	]
+}
