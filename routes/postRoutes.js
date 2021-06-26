@@ -8,13 +8,41 @@ import {
 	deletePost,
 	addComment,
 	updateComment,
+	uploadFileOnS3,
 } from "../controller/postController";
-import upload from "../utils/fileUpload";
+// import upload from "../utils/fileUpload";
+import uploadS3 from "../config/uploadS3";
 
 var router = express.Router();
 
 /* GET users listing */
-router.post("/add-post", verifyToken, upload.single("postCoverPic"), addPost);
+router.post(
+	"/add-post",
+	verifyToken,
+	(req, res, next) => {
+		uploadS3(req, res, error => {
+			if (error) {
+				console.log(`error from aws ->  ${error}`);
+			} else {
+				next();
+			}
+		});
+	},
+	addPost
+);
+router.post(
+	"/upload-image",
+	(req, res, next) => {
+		uploadS3(req, res, error => {
+			if (error) {
+				console.log(`error from aws ->  ${error}`);
+			} else {
+				next();
+			}
+		});
+	},
+	uploadFileOnS3
+);
 router.get("/all-post", verifyToken, postList);
 router.get("/single-post/:id", verifyToken, singlePostDetail);
 router.put("/update-post/:id", verifyToken, updatePost);

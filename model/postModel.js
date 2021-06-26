@@ -21,8 +21,8 @@ const postSchema = mongoose.Schema(
 			required: true,
 		},
 		postCoverPic: {
-			type: String,
-			default: "",
+			type: Array,
+			default: [],
 		},
 		comments: [commentSchema],
 		createdBy: {

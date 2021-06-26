@@ -60,9 +60,8 @@ export const updateComment = async (commentId, userId, data) => {
 		},
 		{
 			$set: {
-				comments: {
-					description: data,
-				},
+				"comments.$.description": data,
+				// commentedBy: userId,
 			},
 		},
 		{
