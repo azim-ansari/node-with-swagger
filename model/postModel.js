@@ -20,10 +20,12 @@ const postSchema = mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		postCoverPic: {
-			type: Array,
-			default: [],
-		},
+		postCoverPic: [
+			{
+				type: String,
+				default: "",
+			},
+		],
 		comments: [commentSchema],
 		createdBy: {
 			type: mongoose.Types.ObjectId,

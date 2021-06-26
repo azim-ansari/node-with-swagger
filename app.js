@@ -5,6 +5,7 @@ import logger from "morgan";
 import mongoInit from "./dbConnection/mongoConnection";
 import swaggerUI from "swagger-ui-express";
 import swaggerJson from "./docs/swagger.json";
+// import swaggerJson1 from "./docs/swagger1.json";
 import indexRouter from "./routes/index";
 
 mongoInit();
