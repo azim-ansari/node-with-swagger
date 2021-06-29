@@ -31,6 +31,6 @@ const uploadSetting = multerS3({
 
 const uploadS3 = multer({
 	storage: uploadSetting,
-}).array("postCoverPic");
+}).single("postCoverPic");
 
 export default uploadS3;

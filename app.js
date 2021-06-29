@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import mongoInit from "./dbConnection/mongoConnection";
+import mongoInit from "./config/mongoConnection";
 import swaggerUI from "swagger-ui-express";
 import swaggerJson from "./docs/swagger.json";
 // import swaggerJson1 from "./docs/swagger1.json";

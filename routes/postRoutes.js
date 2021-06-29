@@ -9,6 +9,7 @@ import {
 	addComment,
 	updateComment,
 	uploadFileOnS3,
+	likePost,
 } from "../controller/postController";
 // import upload from "../utils/fileUpload";
 import uploadS3 from "../config/uploadS3";
@@ -43,9 +44,11 @@ router.post(
 	},
 	uploadFileOnS3
 );
+
 router.get("/all-post", verifyToken, postList);
 router.get("/single-post/:id", verifyToken, singlePostDetail);
-router.put("/update-post/:id", verifyToken, updatePost);
+router.get("/single-post/:id", verifyToken, singlePostDetail);
+router.put("/like-post/:id", verifyToken, likePost);
 router.delete("/delete-post/:id", verifyToken, deletePost);
 router.post("/add-comment/:id", verifyToken, addComment);
 router.put("/update-comment/:id", verifyToken, updateComment);

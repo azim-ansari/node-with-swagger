@@ -15,7 +15,19 @@ export const allPost = async () => {
 };
 
 export const singlePostDetail = async postId => {
-	return await postModel.find({ _id: mongoose.Types.ObjectId(postId) });
+	const data = await postModel.find({ _id: mongoose.Types.ObjectId(postId) });
+	return data;
+};
+export const likePost = async (postId, userId) => {
+	return await postModel.findOneAndUpdate(
+		{ _id: mongoose.Types.ObjectId(postId) },
+		{
+			$push: {
+				likedBy: userId,
+			},
+		},
+		{ new: true, upsert: true }
+	);
 };
 
 export const updatePost = async (postId, userId, postData) => {

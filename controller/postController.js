@@ -6,6 +6,7 @@ import {
 	deletePost,
 	addComment,
 	updateComment,
+	likePost,
 } from "../services/postServices";
 import { handleResponse, handleError, unAuthorized } from "../config/requestHandler";
 // import
@@ -18,15 +19,13 @@ module.exports = {
 			if (!title || !description) {
 				return handleResponse({ res, msg: "Please Enter title and description" });
 			}
-			if (typeof req.files == undefined) {
+			if (typeof req.file == undefined) {
 				return handleResponse({ res, msg: "Profile pic not found" });
 			}
-			// const postCoverPic = "https://post-gallery.s3.ap-south-1.amazonaws.com/" + req.file.filename;
-			const postCoverPic = req.files.map(item => {
-				return item.location;
-			});
-			// console.log("postCoverPic", postCoverPic);
-			const data = await postAdd(title, description, userId, postCoverPic);
+			// const postCoverPic = req.file.map(item => {
+			// 	return item.location;
+			// });
+			const data = await postAdd(title, description, userId, req.file.location);
 			return handleResponse({ res, msg: "Created Post", data: data });
 		} catch (error) {
 			console.log(error);
@@ -36,7 +35,7 @@ module.exports = {
 	uploadFileOnS3: async (req, res) => {
 		try {
 			if (!req.file) {
-				return handleResponse({ res, msg: "No files were uploaded." });
+				return handleResponse({ res, msg: "No file were uploaded." });
 			} else {
 				const ress = { data: req.file.length, file: req.file.location };
 				return handleResponse({ res, msg: "Successfully uploaded ", data: ress });
@@ -102,7 +101,8 @@ module.exports = {
 		try {
 			const postId = req.params.id;
 			const userId = req.user.id;
-			const { description } = req.body;
+			const { description, name, email, password } = req.body;
+			console.log(">>>>", req.body);
 			const commentData = await addComment(postId, userId, description);
 			return handleResponse({ res, msg: "comments Added successfully", data: commentData });
 		} catch (error) {
@@ -120,6 +120,19 @@ module.exports = {
 				const commentData = await updateComment(commentId, userId, description);
 				return handleResponse({ res, msg: "updated  comment  successfully", data: commentData });
 			}
+		} catch (error) {
+			console.log("error::", error);
+			return handleError({ res, error, data: error });
+		}
+	},
+	likePost: async (req, res) => {
+		try {
+			const postId = req.params.Id;
+			const userId = req.user.id;
+
+			const likedPost = await likePost(postId, userId);
+			console.log("likedPost::::", likedPost);
+			return handleResponse({ res, msg: "post Liked successfully", data: likedPost });
 		} catch (error) {
 			console.log("error::", error);
 			return handleError({ res, error, data: error });
