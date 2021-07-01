@@ -81,3 +81,7 @@ export const updateComment = async (commentId, userId, data) => {
 		}
 	);
 };
+
+export const sheet = async (startDate, endDate) => {
+	return await postModel.find({ $gte: startDate, $lte: endDate });
+};

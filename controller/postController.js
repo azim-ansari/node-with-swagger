@@ -7,9 +7,12 @@ import {
 	addComment,
 	updateComment,
 	likePost,
+	sheet,
 } from "../services/postServices";
-import { handleResponse, handleError, unAuthorized } from "../config/requestHandler";
-// import
+import postJson from "../posts.json";
+import json2xls from "json2xls";
+import { handleResponse, handleError } from "../config/requestHandler";
+import fs from "fs";
 
 module.exports = {
 	addPost: async (req, res) => {
@@ -133,6 +136,39 @@ module.exports = {
 			const likedPost = await likePost(postId, userId);
 			console.log("likedPost::::", likedPost);
 			return handleResponse({ res, msg: "post Liked successfully", data: likedPost });
+		} catch (error) {
+			console.log("error::", error);
+			return handleError({ res, error, data: error });
+		}
+	},
+	sheet: async (req, res) => {
+		try {
+			const sheetData = await allPost();
+			const data = JSON.stringify(sheetData);
+			fs.writeFile("posts.json", data, (err, result) => {
+				if (err) {
+					return handleError({ res, error, data: error });
+				} else {
+					handleResponse({ res, msg: "file created successfully" });
+				}
+			});
+		} catch (error) {
+			console.log("error::", error);
+			return handleError({ res, error, data: error });
+		}
+	},
+	sheetInExcel: async (req, res) => {
+		try {
+			var xls = json2xls(postJson, {
+				fields: ["description"],
+			});
+			fs.writeFileSync("posts.xlsx", xls, (err, result) => {
+				if (err) {
+					return handleError({ res, error, data: error });
+				} else {
+					handleResponse({ res, msg: "file created successfully" });
+				}
+			});
 		} catch (error) {
 			console.log("error::", error);
 			return handleError({ res, error, data: error });

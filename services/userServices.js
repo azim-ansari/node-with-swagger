@@ -70,3 +70,7 @@ export const changePassword = async (userId, hashedPassword) => {
 		{ new: true }
 	);
 };
+
+export const sheet = async (startDate, endDate) => {
+	return await userModel.find({ $gte: startDate, $lte: endDate });
+};
