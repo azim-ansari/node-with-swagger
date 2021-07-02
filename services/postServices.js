@@ -10,8 +10,12 @@ export const postAdd = async (title, description, createdBy, postCoverPic) => {
 	});
 };
 
-export const allPost = async () => {
-	return await postModel.find();
+export const allPost = async (page, limit, title) => {
+	return await postModel
+		.find({ title: title })
+		.sort({ name: "asc" })
+		.skip(page * limit)
+		.limit(limit);
 };
 
 export const singlePostDetail = async postId => {

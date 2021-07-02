@@ -50,9 +50,15 @@ module.exports = {
 	},
 	postList: async (req, res) => {
 		try {
-			const data = await allPost({});
-			return handleResponse({ res, msg: "All post List", data: data });
+			const page = parseInt(req.query.page, 10) || 0;
+			const limit = parseInt(req.query.limit, 10) || 100;
+			const title = req.query.title;
+			const data = await allPost(page, limit, title);
+			const count = data.length;
+			const result = { "number of posts": count, data: data };
+			return handleResponse({ res, msg: "All post List", data: result });
 		} catch (error) {
+			console.log("error:::", error);
 			return handleError({ res, error, data: error });
 		}
 	},
@@ -104,8 +110,7 @@ module.exports = {
 		try {
 			const postId = req.params.id;
 			const userId = req.user.id;
-			const { description, name, email, password } = req.body;
-			console.log(">>>>", req.body);
+			const { description } = req.body;
 			const commentData = await addComment(postId, userId, description);
 			return handleResponse({ res, msg: "comments Added successfully", data: commentData });
 		} catch (error) {
