@@ -150,7 +150,6 @@ module.exports = {
 		try {
 			const sheetData = await allPost();
 			const data = JSON.stringify(sheetData);
-
 			fs.writeFile("posts.json", data, (err, result) => {
 				if (err) {
 					return handleError({ res, error, data: error });
